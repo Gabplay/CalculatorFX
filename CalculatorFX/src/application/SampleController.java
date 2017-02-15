@@ -4,15 +4,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import java.lang.Math;
 
 public class SampleController{
     @FXML
     private Label results_screen;
     @FXML
     private void updateScreen(ActionEvent event) {
-    	String text;
 
-    	text = ((Button)event.getSource()).getText();
+    	/*** Variables ***/
+    	String text = ((Button)event.getSource()).getText();
+    	String screen = results_screen.getText();
 
 	    switch(text){
 	    	case "CC":
@@ -21,17 +23,17 @@ public class SampleController{
 	    	case "DEL":
 	    		text = results_screen.getText();
 	    		if(!text.isEmpty()){
-		    		text = text.replace(text.substring(text.length() - 1), "");
+		    		text = text.substring(0, text.length()-1);
 		    		results_screen.setText(text);
 	    		}
 	    		break;
 	    	case "+":
 	    	case "-":
-	    	case "/":
-	    	case "*":
+	    	case "÷":
+	    	case "X":
 	    	case "^":
-	    	case "sqrt":
-	    		String screen = results_screen.getText();
+	    	case "√":
+	    	case "=":
 	    		getOperation(text, screen);
 	    		break;
     		default:
@@ -42,29 +44,38 @@ public class SampleController{
 
     private void getOperation(String text, String screen){
 
-    	long value = Long.parseLong(screen);
-    	long result;
+    	double screen_value = Double.parseDouble(screen);
+    	double result = 0;
+    	String strResult;
+    	char operator = ' ';
+    	char last_screen_char = screen.charAt(text.length() - 1);
 
-    	switch(text){
-    		case "+":
-    			System.out.println("+");
-    			break;
-    		case "-":
-    			System.out.println("-");
-    			break;
-    		case "/":
-    			System.out.println("/");
-    			break;
-    		case "*":
-    			System.out.println("*");
-    			break;
-    		case "^":
-    			result = value * value;
-    			System.out.println(result);
-    			break;
-    		case "=":
-    			results_screen.setText("");
-    			break;
-    	}
+    	if(operator != last_screen_char){
+	    	switch(text){
+	    		case "+":
+	    			System.out.println("+");
+	    			break;
+	    		case "-":
+	    			System.out.println("-");
+	    			break;
+	    		case "÷":
+	    			System.out.println("/");
+	    			break;
+	    		case "X":
+	    			System.out.println("*");
+	    			break;
+	    		case "^":
+	    			result = screen_value * screen_value;
+	    			strResult = Double.toString(result);
+	    			results_screen.setText(strResult);
+	    			break;
+	    		case "√":
+	    			result = Math.sqrt(screen_value);
+	    		case "=":
+	    			strResult = Double.toString(result);
+	    			results_screen.setText(strResult);
+	    			break;
+	    	}
+	    }
     }
 }
