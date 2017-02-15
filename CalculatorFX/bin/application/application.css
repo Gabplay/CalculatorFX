@@ -1,1 +1,12 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+.button{
+	-fx-cursor: hand;
+	-fx-border-color: lightblue;
+	-fx-font-size: 20px;
+	-fx-border-radius: 3px;
+}
+.screen{
+	-fx-padding: 10px;
+	-fx-border-color: lightblue;
+	-fx-background-color: #fff;
+}
