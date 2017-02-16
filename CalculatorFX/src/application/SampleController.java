@@ -9,6 +9,9 @@ import java.lang.Math;
 public class SampleController{
     @FXML
     private Label main_screen, log_screen_label;
+    
+    //TODO: fix scroll pane 
+    //text.wrappingWidthProperty().bind(scene.widthProperty());
 
     /*** Global Variables ***/
     Double result = 0.0, x = 0.0, y = 0.0;
@@ -21,7 +24,7 @@ public class SampleController{
     	String btn_text = ((Button)event.getSource()).getText();
     	String screen_text = main_screen.getText();
     	String log_text = log_screen_label.getText();
-
+    	
     	if(screen_text.equals("0.0 ")){
     		main_screen.setText("");
     		screen_text = "";
@@ -47,7 +50,7 @@ public class SampleController{
 	    		// Do not allow multiple dots or dot without numbers
 	    		if(screen_text.indexOf(".") == -1 && !screen_text.isEmpty()){
 	    			main_screen.setText(screen_text + ".");
-	    			log_screen_label.setText(log_screen_label + ".");
+	    			log_screen_label.setText(log_text + ".");
 	    		}
 	    		break;
 	    	case "+":
@@ -63,8 +66,11 @@ public class SampleController{
 	    		}
 	    		break;
     		default:
-    			main_screen.setText(main_screen.getText() + btn_text);
-    			log_screen_label.setText(log_text + btn_text);
+    			// Limit then number to 16 digits 
+    			if(screen_text.length() <= 16){
+    				main_screen.setText(main_screen.getText() + btn_text);
+        			log_screen_label.setText(log_text + btn_text);
+    			}
     			break;
     	}
     }
@@ -103,11 +109,11 @@ public class SampleController{
     			break;
     		case "^":
     			last_operation = '^';
-    			result = screen_value * screen_value;
+    			result = x;
     			break;
     		case "sqrt":
     			last_operation = 's';
-    			result = Math.sqrt(screen_value);
+    			result = x;
     			break;
     		case "=":
 
@@ -115,10 +121,14 @@ public class SampleController{
 	    			result += x;
     			} else if(last_operation == '-'){
 	    			result -= x;
-    			} else if(last_operation == '*'){
+    			} else if(last_operation == 'x'){
 	    			result *= x;
     			} else if(last_operation == '/'){
 	    			result /= x;
+    			} else if(last_operation == '^'){
+	    			//TODO: Math.pow(x, y);
+    			} else if(last_operation == 's'){
+    				result = Math.sqrt(screen_value);
     			} else{
     				System.out.println("other operation");
     			}
