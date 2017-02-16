@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController">
    <center>
       <AnchorPane prefHeight="440.0" prefWidth="560.0" style="-fx-background-color: #eee; -fx-border-color: lightblue;" BorderPane.alignment="CENTER">
          <children>
@@ -38,7 +38,7 @@
                   <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#updateScreen" text="2" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#updateScreen" text="3" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                   <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#updateScreen" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#updateScreen" text="," GridPane.rowIndex="3" />
+                  <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#updateScreen" text="." GridPane.rowIndex="3" />
                   <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#updateScreen" text="DEL" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                   <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#updateScreen" style="-fx-background-color: #ffed89; -fx-cursor: hand;" text="+" GridPane.columnIndex="3">
                   </Button>
@@ -57,11 +57,11 @@
                   </Button>
                </children>
             </GridPane>
-            <Label fx:id="results_screen" alignment="CENTER_RIGHT" layoutX="25.0" layoutY="86.0" prefHeight="66.0" prefWidth="510.0" styleClass="screen" textAlignment="CENTER">
+            <Label fx:id="main_screen" alignment="CENTER_RIGHT" layoutX="25.0" layoutY="86.0" prefHeight="66.0" prefWidth="510.0" styleClass="screen" text="0.0 " textAlignment="CENTER">
                <font>
                   <Font size="30.0" />
                </font></Label>
-            <Label fx:id="log_screen_label" alignment="CENTER_RIGHT" layoutX="25.0" layoutY="26.0" prefHeight="46.0" prefWidth="509.0" style="-fx-background-color: #fff; " styleClass="screen">
+            <Label fx:id="log_screen_label" alignment="CENTER_RIGHT" layoutX="25.0" layoutY="26.0" prefHeight="46.0" prefWidth="509.0" style="-fx-background-color: #fff; " styleClass="screen" text="Welcome to the JavaFX Calculator!">
                <font>
                   <Font size="18.0" />
                </font></Label>

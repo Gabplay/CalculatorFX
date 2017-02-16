@@ -8,29 +8,48 @@ import java.lang.Math;
 
 public class SampleController{
     @FXML
-    private Label results_screen, log_screen_label;
+    private Label main_screen, log_screen_label;
+
+    /*** Global Variables ***/
+    Double result = 0.0, x = 0.0, y = 0.0;
+    char last_operation;
+
     @FXML
     private void updateScreen(ActionEvent event) {
 
     	/*** Variables ***/
     	String btn_text = ((Button)event.getSource()).getText();
-    	String screen = results_screen.getText();
-    	String log_screen = log_screen_label.getText();
-    	
+    	String screen_text = main_screen.getText();
+    	String log_text = log_screen_label.getText();
+
+    	if(screen_text.equals("0.0 ")){
+    		main_screen.setText("");
+    		screen_text = "";
+    		log_screen_label.setText("");
+    		log_text = "";
+    	}
+
 	    switch(btn_text){
 	    	case "CC":
-	    		results_screen.setText("");
+	    		main_screen.setText("");
 	    		log_screen_label.setText("");
+	    		result = 0.0;
 	    		break;
 	    	case "DEL":
-	    		btn_text = results_screen.getText();
+	    		btn_text = main_screen.getText();
 	    		if(!btn_text.isEmpty()){
 		    		btn_text = btn_text.substring(0, btn_text.length()-1);
-		    		results_screen.setText(btn_text);
-		    		//log_screen_label.setText(log_screen + btn_text);
+		    		main_screen.setText(btn_text);
+		    		//log_text_label.setText(log_text + btn_text);
 	    		}
 	    		break;
-	    	case ",":	
+	    	case ".":
+	    		// Do not allow multiple dots or dot without numbers
+	    		if(screen_text.indexOf(".") == -1 && !screen_text.isEmpty()){
+	    			main_screen.setText(screen_text + ".");
+	    			log_screen_label.setText(log_screen_label + ".");
+	    		}
+	    		break;
 	    	case "+":
 	    	case "-":
 	    	case "/":
@@ -38,55 +57,83 @@ public class SampleController{
 	    	case "^":
 	    	case "sqrt":
 	    	case "=":
-	    		getOperation(btn_text, screen);
-	    		log_screen_label.setText(log_screen + btn_text);
+	    		if(!screen_text.isEmpty()){
+	    			log_screen_label.setText(log_text + " " + btn_text + " ");
+	    			getOperation(btn_text);
+	    		}
 	    		break;
     		default:
-    			results_screen.setText(results_screen.getText() + btn_text);
-    			log_screen_label.setText(log_screen + btn_text);
+    			main_screen.setText(main_screen.getText() + btn_text);
+    			log_screen_label.setText(log_text + btn_text);
     			break;
     	}
     }
 
-    private void getOperation(String btn_text, String screen){
+    // TODO: fix log_screen repeating signs and not deleting
 
-    	double screen_value = Double.parseDouble(screen);
-    	double result = 0, x = 0, y = 0;
+    private void getOperation(String btn_text){
+
+    	String screen_text = main_screen.getText();
+    	String log_text = log_screen_label.getText();
+    	Double screen_value = Double.parseDouble(screen_text);
     	String strResult;
-    	char operator = ' ';
-    	char last_screen_char = screen.charAt(btn_text.length() - 1);
+
+    	main_screen.setText(""); // Clear main screen
+
+    	if(screen_value != null){
+			x = screen_value;
+		}
 
     	switch(btn_text){
     		case "+":
-    			x = screen_value;
-    			results_screen.setText("");
+    			last_operation = '+';
+    			result = x;
     			break;
     		case "-":
-    			System.out.println("-");
+    			last_operation = '-';
+    			result = x;
     			break;
     		case "/":
-    			System.out.println("/");
+    			last_operation = '/';
+    			result = x;
     			break;
     		case "x":
-    			System.out.println("*");
+    			last_operation = 'x';
+    			result = x;
     			break;
     		case "^":
+    			last_operation = '^';
     			result = screen_value * screen_value;
-    			strResult = Double.toString(result);
-    			results_screen.setText(strResult);
     			break;
     		case "sqrt":
+    			last_operation = 's';
     			result = Math.sqrt(screen_value);
-    			strResult = Double.toString(result);
-    			results_screen.setText(strResult);
     			break;
     		case "=":
-    			strResult = Double.toString(result);
-    			results_screen.setText(strResult);
+
+    			if(last_operation == '+'){
+	    			result += x;
+    			} else if(last_operation == '-'){
+	    			result -= x;
+    			} else if(last_operation == '*'){
+	    			result *= x;
+    			} else if(last_operation == '/'){
+	    			result /= x;
+    			} else{
+    				System.out.println("other operation");
+    			}
+    			if(log_text.charAt(log_text.length() - 1) != '+'){
+    				//System.out.println("debug");
+    			}
+    			// Print Result
+    	    	strResult = Double.toString(result);
+    	    	System.out.println(strResult);
+    			log_screen_label.setText(log_text + strResult);
+    			main_screen.setText("0.0 ");
     			break;
     		default:
-    			results_screen.setText(screen + btn_text);
-    			break;	
+    			System.out.println("switch default debug");
+    			break;
     	}
     }
 }
