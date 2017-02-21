@@ -9,12 +9,10 @@ import java.lang.Math;
 public class SampleController{
     @FXML
     private Label main_screen, log_screen_label;
-    
-    //TODO: fix scroll pane 
-    //text.wrappingWidthProperty().bind(scene.widthProperty());
 
     /*** Global Variables ***/
     Double result = 0.0, x = 0.0, y = 0.0;
+    int count_operations = 0;
     char last_operation;
 
     @FXML
@@ -30,6 +28,7 @@ public class SampleController{
     		screen_text = "";
     		log_screen_label.setText("");
     		log_text = "";
+    		count_operations = 0;
     	}
 
 	    switch(btn_text){
@@ -37,13 +36,23 @@ public class SampleController{
 	    		main_screen.setText("");
 	    		log_screen_label.setText("");
 	    		result = 0.0;
+	    		count_operations = 0;
 	    		break;
 	    	case "DEL":
 	    		btn_text = main_screen.getText();
+	    		
 	    		if(!btn_text.isEmpty()){
+	    		   // Change Main Screen
 		    		btn_text = btn_text.substring(0, btn_text.length()-1);
 		    		main_screen.setText(btn_text);
-		    		//log_text_label.setText(log_text + btn_text);
+		    		
+		    		// Change Log Screen if the last char is a number 
+		    		char last_char = log_text.charAt(log_text.length()-1);
+		    		
+		    		if(Character.isDigit(last_char) || last_char == '.'){
+	               log_text = log_text.substring(0, log_text.length()-1);
+	               log_screen_label.setText(log_text);
+	            }
 	    		}
 	    		break;
 	    	case ".":
@@ -59,6 +68,12 @@ public class SampleController{
 	    	case "x":
 	    	case "^":
 	    	case "sqrt":
+	    	  count_operations++;
+           if(!screen_text.isEmpty() && (count_operations <= 1)){
+              log_screen_label.setText(log_text + " " + btn_text + " ");
+              getOperation(btn_text);
+           }
+           break;
 	    	case "=":
 	    		if(!screen_text.isEmpty()){
 	    			log_screen_label.setText(log_text + " " + btn_text + " ");
@@ -75,14 +90,13 @@ public class SampleController{
     	}
     }
 
-    // TODO: fix log_screen repeating signs and not deleting
+    // TODO: get keyboard input
 
     private void getOperation(String btn_text){
 
     	String screen_text = main_screen.getText();
     	String log_text = log_screen_label.getText();
     	Double screen_value = Double.parseDouble(screen_text);
-    	String strResult;
 
     	main_screen.setText(""); // Clear main screen
 
@@ -112,38 +126,43 @@ public class SampleController{
     			result = x;
     			break;
     		case "sqrt":
-    			last_operation = 's';
-    			result = x;
+    		   result = Math.sqrt(screen_value);
+    		   printResult(result, log_text, false);
     			break;
     		case "=":
-
-    			if(last_operation == '+'){
-	    			result += x;
-    			} else if(last_operation == '-'){
-	    			result -= x;
-    			} else if(last_operation == 'x'){
-	    			result *= x;
-    			} else if(last_operation == '/'){
-	    			result /= x;
-    			} else if(last_operation == '^'){
-	    			//TODO: Math.pow(x, y);
-    			} else if(last_operation == 's'){
-    				result = Math.sqrt(screen_value);
-    			} else{
-    				System.out.println("other operation");
-    			}
-    			if(log_text.charAt(log_text.length() - 1) != '+'){
-    				//System.out.println("debug");
-    			}
-    			// Print Result
-    	    	strResult = Double.toString(result);
-    	    	System.out.println(strResult);
-    			log_screen_label.setText(log_text + strResult);
-    			main_screen.setText("0.0 ");
+    		   getResult();
+    			printResult(result, log_text, true);
     			break;
     		default:
     			System.out.println("switch default debug");
     			break;
     	}
+    }
+    
+    private double getResult(){
+       if(last_operation == '+'){
+          result += x;
+       } else if(last_operation == '-'){
+          result -= x;
+       } else if(last_operation == 'x'){
+          result *= x;
+       } else if(last_operation == '/'){
+          result /= x;
+       } else if(last_operation == '^'){
+          result = Math.pow(result, x);
+       } 
+       return result;
+    }
+    
+    private void printResult(Double result, String log_text, boolean equals){
+       String strResult = Double.toString(result);
+       System.out.println(strResult);
+       
+       if(!equals){
+          log_screen_label.setText(log_text + " = " + strResult);
+       } else{
+          log_screen_label.setText(log_text + strResult);
+       }
+       main_screen.setText("0.0 ");
     }
 }
