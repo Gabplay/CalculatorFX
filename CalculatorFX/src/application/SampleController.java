@@ -129,8 +129,10 @@ public class SampleController{
 		// Initial Screen
 		if(screen_text.equals("0.0 ")){
 			clearScreen();
-			clear = true;
-		} 
+			clear = true; // Clear after result is shown
+		} else if(screen_text.equals("0") && log_text.equals("0")){
+			clearScreen(); // Do not show useless zeros to the left
+		}
 		// Clear screen if typed digit after result is shown
 		else if(last_operation == '=' && btn_text.chars().allMatch( Character::isDigit ) && !clear){
 			clearScreen();
@@ -145,23 +147,7 @@ public class SampleController{
 			clearScreen();
 			break;
 		case "DEL":
-			btn_text = main_screen.getText();
-
-			if(last_operation == '=' && !clear){
-				clearScreen();
-			} else if(!btn_text.isEmpty()){
-				// Change Main Screen
-				btn_text = btn_text.substring(0, btn_text.length()-1);
-				main_screen.setText(btn_text);
-
-				// Change Log Screen if the last char is a number or a period
-				char last_char = log_text.charAt(log_text.length()-1);
-
-				if(Character.isDigit(last_char) || last_char == '.'){
-					log_text = log_text.substring(0, log_text.length()-1);
-					log_screen_label.setText(log_text);
-				}
-			}
+			deleteLastChar(screen_text, log_text);
 			break;
 		case ".":
 			// Do not allow multiple dots or dot without numbers
@@ -189,9 +175,8 @@ public class SampleController{
 			}
 			break;
 		default:
-			// TODO: Do not show useless zeros to the left
-			// Limit the number to 16 digits 
-			if(screen_text.length() <= 16){
+			// Limit the number to 16 digits and do not show useless zeros to the left
+			if(screen_text.length() <= 16 && !(screen_text.equals("0") && btn_text.equals("0"))){
 				main_screen.setText(main_screen.getText() + btn_text);
 				log_screen_label.setText(log_text + btn_text);
 			} 
@@ -203,6 +188,26 @@ public class SampleController{
 		main_screen.setText("");
 		log_screen_label.setText("");
 		count_operations = 0;
+	}
+	
+	private void deleteLastChar(String screen_text, String log_text){
+		if(last_operation == '=' && !clear){
+			clearScreen(); // Clear screen after result is shown
+		} 
+		else if(!screen_text.isEmpty()){
+			// Change Main Screen
+			screen_text = screen_text.substring(0, screen_text.length()-1);
+			main_screen.setText(screen_text);
+
+			// Change Log Screen if the last char is a number or a period
+			char last_char = log_text.charAt(log_text.length()-1);
+			
+			// Delete if last char is a digit or a period
+			if(Character.isDigit(last_char) || last_char == '.'){
+				log_text = log_text.substring(0, log_text.length()-1);
+				log_screen_label.setText(log_text);
+			}
+		}
 	}
 
 	private void getOperation(String btn_text){
@@ -276,7 +281,7 @@ public class SampleController{
 			if(x.compareTo(BigDecimal.ZERO) == 0){
 				error = true;
 			} else{
-				result = result.divide(x);	
+				result = result.divide(x, 2, BigDecimal.ROUND_HALF_EVEN);
 			}
 		} else if(last_operation == '^'){
 			result = BigDecimal.valueOf(Math.pow(result.doubleValue(), x.doubleValue()));
