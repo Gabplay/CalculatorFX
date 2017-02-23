@@ -17,7 +17,7 @@
 	-fx-background-color: #fff;
 }
 .btn-equals{
-	-fx-background-color: blue;
+	-fx-background-color: lightblue;
 }
 .btn-equals:hover{
 	-fx-background-color: #89c1ff;

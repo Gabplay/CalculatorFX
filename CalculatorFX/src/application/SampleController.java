@@ -10,18 +10,19 @@ import java.lang.Math;
 
 // TODO: fix ScrollPane and do not show zeros to the left
 // TODO: get KeyEvent for exponentiation
-// TODO: change Double to BigDecimal
 
 public class SampleController{
 	@FXML
 	private Label main_screen, log_screen_label;
 
 	/*** Global Variables ***/
-	Double result = 0.0, x = 0.0;
+	BigDecimal result = new BigDecimal("0");
+	BigDecimal x = new BigDecimal("0");
 	int count_operations = 0;
-	char last_operation;
+	char last_operation = '=';
 	String strResult;
 	boolean clear = false;
+	boolean error = false;
 
 	@FXML
 	private void onButtonClick(ActionEvent event) {
@@ -32,9 +33,9 @@ public class SampleController{
 	@FXML
 	private void onKeyReleased(KeyEvent event) {
 		System.out.println("Key Pressed: " + event.getCode());
-		
+
 		String btn_text;
-		
+
 		switch(event.getCode()){
 		case DELETE:
 		case BACK_SPACE:	
@@ -61,6 +62,9 @@ public class SampleController{
 			break;
 		case DIVIDE:
 			btn_text = "/";
+			break;
+		case E:
+			btn_text = "^";
 			break;
 		case S:
 			btn_text = "sqrt";
@@ -147,7 +151,7 @@ public class SampleController{
 				btn_text = btn_text.substring(0, btn_text.length()-1);
 				main_screen.setText(btn_text);
 
-				// Change Log Screen if the last char is a number 
+				// Change Log Screen if the last char is a number or a period
 				char last_char = log_text.charAt(log_text.length()-1);
 
 				if(Character.isDigit(last_char) || last_char == '.'){
@@ -206,7 +210,7 @@ public class SampleController{
 		main_screen.setText(""); // Clear main screen
 
 		if(screen_value != null){
-			x = screen_value;
+			x = BigDecimal.valueOf(screen_value);
 		}
 
 		switch(btn_text){
@@ -231,12 +235,23 @@ public class SampleController{
 			result = x;
 			break;
 		case "sqrt":
-			result = Math.sqrt(screen_value);
-			printResult(result, log_text, false);
+			// If x is a negative value
+			if(x.compareTo(BigDecimal.ZERO) <= 0){
+				log_screen_label.setText("Cannot calculate negative square roots!");
+			} else{
+				result = BigDecimal.valueOf(Math.sqrt(screen_value));
+				printResult(result, log_text, false);
+			}
 			break;
 		case "=":
-			getResult();
-			printResult(result, log_text, true);
+			result = getResult();
+			if(error){
+				log_screen_label.setText("Cannot divide by zero!");
+				main_screen.setText("0.0 ");
+				error = false;
+			} else{
+				printResult(result, log_text, true);
+			}
 			break;
 		default:
 			System.out.println("switch default debug");
@@ -244,23 +259,30 @@ public class SampleController{
 		}
 	}
 
-	private double getResult(){
+	private BigDecimal getResult(){
 		if(last_operation == '+'){
-			result += x;
+			result = result.add(x);
 		} else if(last_operation == '-'){
-			result -= x;
+			result = result.subtract(x);
 		} else if(last_operation == 'x'){
-			result *= x;
+			result = result.multiply(x);
 		} else if(last_operation == '/'){
-			result /= x;
+			// Cannot divide by zero
+			if(x.compareTo(BigDecimal.ZERO) == 0){
+				error = true;
+			} else{
+				result = result.divide(x);	
+			}
 		} else if(last_operation == '^'){
-			result = Math.pow(result, x);
-		} 
+			result = BigDecimal.valueOf(Math.pow(result.doubleValue(), x.doubleValue()));
+		}
 		return result;
 	}
 
-	private void printResult(Double result, String log_text, boolean equals){
-		strResult = Double.toString(result);
+	private void printResult(BigDecimal result, String log_text, boolean equals){
+
+		strResult = result.toString();
+
 		System.out.println(strResult);
 
 		if(!equals){
@@ -272,17 +294,7 @@ public class SampleController{
 		last_operation = '=';
 		clear = false;
 		count_operations = 0;
-		result = 0.0;
-
-		// Errors Handling
-		if(strResult.equals("Infinity") || strResult.equals("-Infinity")){
-			log_screen_label.setText("Division by zero = Infinity");
-			main_screen.setText("");
-		} else if(strResult.equals("NaN")){
-			log_screen_label.setText("Cannot calculate negative square roots!");
-			main_screen.setText("");
-		} else{
-			main_screen.setText(strResult);
-		}
+		result = new BigDecimal("0");
+		main_screen.setText(strResult);
 	}
 }
