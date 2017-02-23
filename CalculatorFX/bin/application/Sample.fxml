@@ -54,7 +54,7 @@
                   </Button>
                   <Button maxHeight="1.79E308" maxWidth="1.79E308" mnemonicParsing="false" onAction="#onButtonClick" onKeyReleased="#onKeyReleased" style="-fx-background-color: #ffed89; -fx-cursor: hand;" styleClass="button-op" text="sqrt" GridPane.columnIndex="4" GridPane.rowIndex="2">
                   </Button>
-                  <Button defaultButton="true" maxHeight="1.79E308" maxWidth="1.79E308" mnemonicParsing="false" onAction="#onButtonClick" onKeyReleased="#onKeyReleased" text="=" GridPane.columnIndex="4" GridPane.rowIndex="3">
+                  <Button maxHeight="1.79E308" maxWidth="1.79E308" mnemonicParsing="false" onAction="#onButtonClick" onKeyReleased="#onKeyReleased" text="=" styleClass="btn-equals" GridPane.columnIndex="4" GridPane.rowIndex="3">
                   </Button>
                </children>
             </GridPane>

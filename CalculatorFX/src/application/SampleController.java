@@ -5,15 +5,19 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
-
+import java.math.BigDecimal;
 import java.lang.Math;
+
+// TODO: fix ScrollPane and do not show zeros to the left
+// TODO: get KeyEvent for exponentiation
+// TODO: change Double to BigDecimal
 
 public class SampleController{
 	@FXML
 	private Label main_screen, log_screen_label;
 
 	/*** Global Variables ***/
-	Double result = 0.0, x = 0.0, y = 0.0;
+	Double result = 0.0, x = 0.0;
 	int count_operations = 0;
 	char last_operation;
 	String strResult;
@@ -41,7 +45,7 @@ public class SampleController{
 			break;
 		case PERIOD:
 		case DECIMAL:
-			btn_text = "-";
+			btn_text = ".";
 			break;
 		case PLUS:
 		case ADD:	
@@ -55,7 +59,14 @@ public class SampleController{
 		case X:
 			btn_text = "x";
 			break;
+		case DIVIDE:
+			btn_text = "/";
+			break;
+		case S:
+			btn_text = "sqrt";
+			break;
 		case EQUALS:
+		case ENTER:
 			btn_text = "=";
 			break;
 		case NUMPAD0:
@@ -129,7 +140,7 @@ public class SampleController{
 		case "DEL":
 			btn_text = main_screen.getText();
 
-			if(last_operation == '='){
+			if(last_operation == '=' && !clear){
 				clearScreen();
 			} else if(!btn_text.isEmpty()){
 				// Change Main Screen
@@ -165,7 +176,7 @@ public class SampleController{
 			}
 			break;
 		case "=":
-			if(!screen_text.isEmpty()){
+			if(!screen_text.isEmpty() && last_operation != '='){
 				log_screen_label.setText(log_text + " " + btn_text + " ");
 				getOperation(btn_text);
 			}
@@ -253,7 +264,7 @@ public class SampleController{
 		System.out.println(strResult);
 
 		if(!equals){
-			log_screen_label.setText(log_text + " = " + strResult);
+			log_screen_label.setText(log_text + "= " + strResult);
 		} else{
 			log_screen_label.setText(log_text + strResult);
 		}
@@ -264,7 +275,7 @@ public class SampleController{
 		result = 0.0;
 
 		// Errors Handling
-		if(strResult.equals("Infinity")){
+		if(strResult.equals("Infinity") || strResult.equals("-Infinity")){
 			log_screen_label.setText("Division by zero = Infinity");
 			main_screen.setText("");
 		} else if(strResult.equals("NaN")){
