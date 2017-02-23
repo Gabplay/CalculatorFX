@@ -8,8 +8,7 @@ import javafx.scene.input.KeyEvent;
 import java.math.BigDecimal;
 import java.lang.Math;
 
-// TODO: fix ScrollPane and do not show zeros to the left
-// TODO: get KeyEvent for exponentiation
+// TODO: fix ScrollPane
 
 public class SampleController{
 	@FXML
@@ -23,6 +22,7 @@ public class SampleController{
 	String strResult;
 	boolean clear = false;
 	boolean error = false;
+	
 
 	@FXML
 	private void onButtonClick(ActionEvent event) {
@@ -129,7 +129,10 @@ public class SampleController{
 		// Initial Screen
 		if(screen_text.equals("0.0 ")){
 			clearScreen();
-		} else if(last_operation == '=' && btn_text.chars().allMatch( Character::isDigit ) && !clear){
+			clear = true;
+		} 
+		// Clear screen if typed digit after result is shown
+		else if(last_operation == '=' && btn_text.chars().allMatch( Character::isDigit ) && !clear){
 			clearScreen();
 			clear = true;
 		}
@@ -173,8 +176,8 @@ public class SampleController{
 		case "x":
 		case "^":
 		case "sqrt":
-			count_operations++;
-			if(!screen_text.isEmpty() && (count_operations <= 1)){
+			if(!screen_text.isEmpty() && (count_operations < 1)){
+				count_operations++;
 				log_screen_label.setText(log_text + " " + btn_text + " ");
 				getOperation(btn_text);
 			}
@@ -186,11 +189,12 @@ public class SampleController{
 			}
 			break;
 		default:
-			// Limit then number to 16 digits 
+			// TODO: Do not show useless zeros to the left
+			// Limit the number to 16 digits 
 			if(screen_text.length() <= 16){
 				main_screen.setText(main_screen.getText() + btn_text);
 				log_screen_label.setText(log_text + btn_text);
-			}
+			} 
 			break;
 		}
 	}
@@ -249,12 +253,13 @@ public class SampleController{
 				log_screen_label.setText("Cannot divide by zero!");
 				main_screen.setText("0.0 ");
 				error = false;
+				last_operation = '=';
 			} else{
 				printResult(result, log_text, true);
 			}
 			break;
 		default:
-			System.out.println("switch default debug");
+			System.out.println("Error - Operation Not Found!");
 			break;
 		}
 	}
@@ -280,10 +285,8 @@ public class SampleController{
 	}
 
 	private void printResult(BigDecimal result, String log_text, boolean equals){
-
 		strResult = result.toString();
-
-		System.out.println(strResult);
+		System.out.println("Final Result = " + strResult);
 
 		if(!equals){
 			log_screen_label.setText(log_text + "= " + strResult);
