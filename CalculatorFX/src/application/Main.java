@@ -20,6 +20,7 @@ public class Main extends Application{
 			primaryStage.setTitle("CalculatorFX");
 			
 			primaryStage.getIcons().add(new Image("http://www.favicon.cc/logo3d/435639.png"));
+			
 			// Do not allow window resize
 			primaryStage.setResizable(false);
 		} catch(Exception e) {

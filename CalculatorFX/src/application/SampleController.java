@@ -8,8 +8,6 @@ import javafx.scene.input.KeyEvent;
 import java.math.BigDecimal;
 import java.lang.Math;
 
-// TODO: fix ScrollPane
-
 public class SampleController{
 	@FXML
 	private Label main_screen, log_screen_label;
@@ -22,7 +20,6 @@ public class SampleController{
 	String strResult;
 	boolean clear = false;
 	boolean error = false;
-	
 
 	@FXML
 	private void onButtonClick(ActionEvent event) {
@@ -33,7 +30,6 @@ public class SampleController{
 	@FXML
 	private void onKeyReleased(KeyEvent event) {
 		System.out.println("Key Pressed: " + event.getCode());
-
 		String btn_text;
 
 		switch(event.getCode()){
@@ -211,11 +207,9 @@ public class SampleController{
 	}
 
 	private void getOperation(String btn_text){
-
 		String screen_text = main_screen.getText();
 		String log_text = log_screen_label.getText();
 		Double screen_value = Double.parseDouble(screen_text);
-
 		main_screen.setText(""); // Clear main screen
 
 		if(screen_value != null){
