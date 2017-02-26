@@ -1,18 +1,40 @@
 /* JavaFX CSS */
+@font-face {
+    font-family: Delicious;
+    src: url('fonts/Carre.ttf');
+}
+
 .button{
 	-fx-cursor: hand;
 	-fx-border-color: lightblue;
 	-fx-font-size: 20px;
 	-fx-border-radius: 3px;
 }
+.button-digit{
+	-fx-font-family: "Carre";
+}
 .button:hover{
-   -fx-font-weight:bold; 
+   -fx-font-weight:bold;
 }
 .button-op:hover{
-   -fx-background-color: #ffe65b !important; 
+   -fx-background-color: #ffe65b !important;
+}
+.btn-equals{
+	-fx-background-color: lightblue;
+}
+.btn-equals:hover{
+	-fx-background-color: #89c1ff;
 }
 .screen{
 	-fx-padding: 10px;
 	-fx-border-color: lightblue;
 	-fx-background-color: #fff;
+	-fx-font-family: "Carre";
+}
+#log_screen_label{
+	-fx-font-family: "Arial", monospace;
+	-fx-font-size: 18px;
+}
+#main_screen{
+	-fx-font-size: 30px;
 }

@@ -14,10 +14,10 @@
 	-fx-font-family: "Carre";
 }
 .button:hover{
-   -fx-font-weight:bold; 
+   -fx-font-weight:bold;
 }
 .button-op:hover{
-   -fx-background-color: #ffe65b !important; 
+   -fx-background-color: #ffe65b !important;
 }
 .btn-equals{
 	-fx-background-color: lightblue;
