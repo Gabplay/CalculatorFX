@@ -13,13 +13,10 @@ public class SampleController{
 	private Label main_screen, log_screen_label;
 
 	/*** Global Variables ***/
-	BigDecimal result = new BigDecimal("0");
-	BigDecimal x = new BigDecimal("0");
+	BigDecimal result = new BigDecimal("0"), x = new BigDecimal("0");
 	int count_operations = 0;
 	char last_operation = '=';
-	String strResult;
-	boolean clear = false;
-	boolean error = false;
+	boolean clear = false, error = false;
 
 	@FXML
 	private void onButtonClick(ActionEvent event) {
@@ -31,7 +28,6 @@ public class SampleController{
 	private void onKeyReleased(KeyEvent event) {
 		System.out.println("Key Pressed: " + event.getCode());
 		String btn_text;
-
 		switch(event.getCode()){
 			case DELETE:
 			case BACK_SPACE:
@@ -119,7 +115,6 @@ public class SampleController{
 	}
 
 	private void updateScreen(String btn_text){
-
 		/*** Variables ***/
 		String screen_text = main_screen.getText();
 		String log_text = log_screen_label.getText();
@@ -136,10 +131,9 @@ public class SampleController{
 			clearScreen();
 			clear = true;
 		}
-
 		screen_text = main_screen.getText();
 		log_text = log_screen_label.getText();
-
+		
 		switch(btn_text){
 			case "CC":
 				clearScreen();
@@ -226,26 +220,11 @@ public class SampleController{
 		x = BigDecimal.valueOf(screen_value);
 		if(!btn_text.equals("=")) {
 			last_operation = btn_text.charAt(0);
+			result = x;
 		}
 
 		switch(btn_text){
-			case "+":
-				result = x;
-				break;
-			case "-":
-				result = x;
-				break;
-			case "/":
-				result = x;
-				break;
-			case "x":
-				result = x;
-				break;
-			case "^":
-				result = x;
-				break;
 			case "sqrt":
-				last_operation = 's';
 				// If x is a negative value
 				if(x.compareTo(BigDecimal.ZERO) <= 0){
 					log_screen_label.setText("Cannot calculate negative square roots!");
@@ -268,7 +247,7 @@ public class SampleController{
 				}
 				break;
 			default:
-				System.out.println("Error - Operation Not Found!");
+				System.out.println("Other Operation!");
 				break;
 		}
 	}
@@ -304,9 +283,8 @@ public class SampleController{
 	}
 
 	private void printResult(BigDecimal result, String log_text, boolean show_equals){
-		strResult = result.toString();
+		String strResult = result.toString();
 		System.out.println("Final Result = " + strResult);
-
 		if(show_equals){
 			log_screen_label.setText(log_text + "= " + strResult);
 		} else{
